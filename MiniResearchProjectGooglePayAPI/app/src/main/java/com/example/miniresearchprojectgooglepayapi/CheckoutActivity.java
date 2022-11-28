@@ -24,6 +24,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -34,6 +35,7 @@ import com.google.android.gms.wallet.IsReadyToPayRequest;
 import com.google.android.gms.wallet.PaymentData;
 import com.google.android.gms.wallet.PaymentDataRequest;
 import com.google.android.gms.wallet.PaymentsClient;
+
 
 import java.util.Locale;
 import java.util.Optional;
@@ -48,7 +50,7 @@ import androidx.appcompat.app.AppCompatActivity;
 /**
   * Checkout implementation for the app
   */
-public class CheckoutActivity extends AppCompatActivity {
+public class CheckoutActivity<ActivityCheckoutBinding> extends AppCompatActivity {
 
     // Arbitrarily-picked constant integer you define to track a request for payment data activity.
     private static final int LOAD_PAYMENT_DATA_REQUEST_CODE = 991;
@@ -62,8 +64,14 @@ public class CheckoutActivity extends AppCompatActivity {
 //    private View googlePayButton;
 
     //Buttons
-    Button redBtn;
-    Button blueBtn;
+    Button colorBtn;
+
+    Button useBtn;
+    Boolean isBought = false;
+
+    LinearLayout background;
+
+    private View googlePayButton;
 
     /**
      * Initialize the Google Pay API on creation of the activity
@@ -75,15 +83,28 @@ public class CheckoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        initializeUi();
         setContentView(R.layout.activity_main);
-        redBtn = findViewById(R.id.red_button);
-        blueBtn = findViewById(R.id.blue_button);
-        redBtn.setOnClickListener(this::requestPayment);
-        blueBtn.setOnClickListener(this::requestPayment);
+        colorBtn = findViewById(R.id.color_button);
+        useBtn = findViewById(R.id.use_btn);
+        background = findViewById(R.id.layout_background);
+
+        // The Google Pay button is a layout file – take the root view
+        googlePayButton = findViewById(R.id.googlePay);
+        googlePayButton.setOnClickListener(this::requestPayment);
 
         // Initialize a Google Pay API client for an environment suitable for testing.
         // It's recommended to create the PaymentsClient object inside of the onCreate method.
         paymentsClient = PaymentsUtil.createPaymentsClient(this);
         possiblyShowGooglePayButton();
+
+        useBtn.setOnClickListener(view ->{
+            if(isBought == true){
+                //change background color to color bought
+                background.setBackground(colorBtn.getBackground());
+            }
+            else{
+                Toast.makeText(this, "You must buy this first!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
@@ -119,43 +140,9 @@ public class CheckoutActivity extends AppCompatActivity {
                 }
 
                 // Re-enables the Google Pay payment button.
-//                googlePayButton.setClickable(true);
-                redBtn.setClickable(true);
-                blueBtn.setClickable(true);
+                googlePayButton.setClickable(true);
         }
     }
-
-//    private void initializeUi() {
-//
-//        // Use view binding to access the UI elements
-//        layoutBinding = ActivityCheckoutBinding.inflate(getLayoutInflater());
-//        setContentView(layoutBinding.getRoot());
-//
-//        // The Google Pay button is a layout file – take the root view
-//        googlePayButton = layoutBinding.googlePayButton.getRoot();
-//        googlePayButton.setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        requestPayment(view);
-//                    }
-//                });
-//    }
-
-//    private void displayGarment(JSONObject garment) throws JSONException {
-//        layoutBinding.detailTitle.setText(garment.getString("title"));
-//        layoutBinding.detailPrice.setText(
-//                String.format(Locale.getDefault(), "$%.2f", garment.getDouble("price")));
-//
-//        final String escapedHtmlText = Html.fromHtml(
-//                garment.getString("description"), Html.FROM_HTML_MODE_COMPACT).toString();
-//        layoutBinding.detailDescription.setText(Html.fromHtml(
-//                escapedHtmlText, Html.FROM_HTML_MODE_COMPACT));
-//
-//        final String imageUri = String.format("@drawable/%s", garment.getString("image"));
-//        final int imageResource = getResources().getIdentifier(imageUri, null, getPackageName());
-//        layoutBinding.detailImage.setImageResource(imageResource);
-//    }
 
     /**
      * Determine the viewer's ability to pay with a payment method supported by your app and display a
@@ -210,9 +197,7 @@ public class CheckoutActivity extends AppCompatActivity {
      */
     private void setGooglePayAvailable(boolean available) {
         if (available) {
-//            googlePayButton.setVisibility(View.VISIBLE);
-            redBtn.setVisibility(View.VISIBLE);
-            blueBtn.setVisibility(View.VISIBLE);
+            googlePayButton.setVisibility(View.VISIBLE);
         } else {
             Toast.makeText(this, "status unavailable", Toast.LENGTH_LONG).show();
         }
@@ -245,6 +230,8 @@ public class CheckoutActivity extends AppCompatActivity {
             final String billingName = info.getJSONObject("billingAddress").getString("name");
             Toast.makeText(
                     this, "successfullly billed " + billingName, Toast.LENGTH_LONG).show();
+            //set boolean to successfully bought
+            isBought = true;
 
             // Logging token string.
             Log.d("Google Pay token: ", token);
@@ -270,19 +257,10 @@ public class CheckoutActivity extends AppCompatActivity {
     public void requestPayment(View view) {
 
         // Disables the button to prevent multiple clicks.
-//        googlePayButton.setClickable(false);
-        redBtn.setClickable(false);
-        blueBtn.setClickable(false);
+        googlePayButton.setClickable(false);
+
         // The price provided to the API should include taxes and shipping.
-        // This price is not displayed to the user.
-        //            double garmentPrice = selectedGarment.getDouble("price");
-//            long garmentPriceCents = Math.round(garmentPrice * PaymentsUtil.CENTS_IN_A_UNIT.longValue());
-//            long priceCents = garmentPriceCents + SHIPPING_COST_CENTS;
-//
-//            Optional<JSONObject> paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(priceCents);
-//            if (!paymentDataRequestJson.isPresent()) {
-//                return;
-//            }
+        //sample price
         double itemPrice = 1.0;
         long itemPriceCents = Math.round(itemPrice * PaymentsUtil.CENTS_IN_A_UNIT.longValue());
         long itemCents = itemPriceCents + SHIPPING_COST_CENTS;
@@ -314,19 +292,4 @@ public class CheckoutActivity extends AppCompatActivity {
 
     }
 
-//    private JSONObject fetchRandomGarment() {
-//
-//        // Only load the list of items if it has not been loaded before
-//        if (garmentList == null) {
-//            garmentList = Json.readFromResources(this, R.raw.tshirts);
-//        }
-//
-//        // Take a random element from the list
-//        int randomIndex = Math.toIntExact(Math.round(Math.random() * (garmentList.length() - 1)));
-//        try {
-//            return garmentList.getJSONObject(randomIndex);
-//        } catch (JSONException e) {
-//            throw new RuntimeException("The index specified is out of bounds.");
-//        }
-//    }
 }
