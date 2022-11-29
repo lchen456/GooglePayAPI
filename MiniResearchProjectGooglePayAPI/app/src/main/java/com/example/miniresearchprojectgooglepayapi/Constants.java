@@ -95,6 +95,7 @@ public class Constants {
      * Please refer to your processor's documentation for more information. The number of parameters
      * required and their names vary depending on the processor.
      *
+     * For payment providers ex: "gateway": "chase" "gatewayMerchantId" -> may need to apply with Chase Merchant Services
      * @value #PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS
      */
     public static final HashMap<String, String> PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS =
