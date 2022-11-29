@@ -55,20 +55,15 @@ public class CheckoutActivity<ActivityCheckoutBinding> extends AppCompatActivity
     // Arbitrarily-picked constant integer you define to track a request for payment data activity.
     private static final int LOAD_PAYMENT_DATA_REQUEST_CODE = 991;
 
-    private static final long SHIPPING_COST_CENTS = 90 * PaymentsUtil.CENTS_IN_A_UNIT.longValue();
-
+//    private static final long SHIPPING_COST_CENTS = 90 * PaymentsUtil.CENTS_IN_A_UNIT.longValue();
+    private static final long SHIPPING_COST_CENTS = 0; //this is a digital product
     // A client for interacting with the Google Pay API.
     private PaymentsClient paymentsClient;
 
-//    private ActivityCheckoutBinding layoutBinding;
-//    private View googlePayButton;
-
     //Buttons
     Button colorBtn;
-
     Button useBtn;
     Boolean isBought = false;
-
     LinearLayout background;
 
     private View googlePayButton;
@@ -228,6 +223,7 @@ public class CheckoutActivity<ActivityCheckoutBinding> extends AppCompatActivity
             final String token = tokenizationData.getString("token");
             final JSONObject info = paymentMethodData.getJSONObject("info");
             final String billingName = info.getJSONObject("billingAddress").getString("name");
+
             Toast.makeText(
                     this, "successfullly billed " + billingName, Toast.LENGTH_LONG).show();
             //set boolean to successfully bought
@@ -237,7 +233,7 @@ public class CheckoutActivity<ActivityCheckoutBinding> extends AppCompatActivity
             Log.d("Google Pay token: ", token);
 
         } catch (JSONException e) {
-            throw new RuntimeException("The selected garment cannot be parsed from the list of elements");
+            throw new RuntimeException("error");
         }
     }
 
@@ -264,6 +260,7 @@ public class CheckoutActivity<ActivityCheckoutBinding> extends AppCompatActivity
         double itemPrice = 1.0;
         long itemPriceCents = Math.round(itemPrice * PaymentsUtil.CENTS_IN_A_UNIT.longValue());
         long itemCents = itemPriceCents + SHIPPING_COST_CENTS;
+        Log.d("itemCents", String.valueOf(itemCents));
 
         Optional<JSONObject> paymentDataRequestJson = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -275,8 +272,7 @@ public class CheckoutActivity<ActivityCheckoutBinding> extends AppCompatActivity
             }
         }
 
-        PaymentDataRequest request =
-                null;
+        PaymentDataRequest request = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             request = PaymentDataRequest.fromJson(paymentDataRequestJson.get().toString());
         }
@@ -285,8 +281,7 @@ public class CheckoutActivity<ActivityCheckoutBinding> extends AppCompatActivity
         // AutoResolveHelper to wait for the user interacting with it. Once completed,
         // onActivityResult will be called with the result.
         if (request != null) {
-            AutoResolveHelper.resolveTask(
-                    paymentsClient.loadPaymentData(request),
+            AutoResolveHelper.resolveTask(paymentsClient.loadPaymentData(request),
                     this, LOAD_PAYMENT_DATA_REQUEST_CODE);
         }
 
