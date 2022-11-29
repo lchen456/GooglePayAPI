@@ -10,11 +10,8 @@ For simplicity's sake, we have decided to just implement one color (purple). How
 [Setup](https://developers.google.com/pay/api/android/guides/setup)
 - in app/build.gradle (module) add the following dependency:
 ` dependencies { implementation 'com.google.android.gms:play-services-wallet:19.1.0'} `
-- in the manifest file add the following metadata to <application>:
-> <meta-data
->  android:name="com.google.android.gms.wallet.api.enabled"
->  android:value="true" />
-- The 
+- in the manifest file add the following metadata to `<application>`:
+`<meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />`
 
 ## Environment
 There are two environments: test and production. For this app we are using the test environment which does not actually charge the payment method. `WalletConstants.ENVIRONMENT_TEST` 
