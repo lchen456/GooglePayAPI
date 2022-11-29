@@ -8,6 +8,8 @@ For simplicity's sake, we have decided to just implement one color (purple). How
 
 ## Setup
 [Setup](https://developers.google.com/pay/api/android/guides/setup)
+- minSdkVersion : 19 or higher
+- compileSdkVersion : 28 or higher 
 - in app/build.gradle (module) add the following dependency:
 ` dependencies { implementation 'com.google.android.gms:play-services-wallet:19.1.0'} `
 - in the manifest file add the following metadata to `<application>`:
