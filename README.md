@@ -22,17 +22,9 @@ For this assignment, we did not open our app to testers which would require us t
 
 ## Implementation
 There are three main files:
-1. PaymentsUtils.java 
-2. Constants.java
+1. Constants.java
+2. PaymentsUtils.java  
 3. CheckoutActivity.java
-
-### PaymentsUtils.java
-This file contains the methods and helpers for getting payment requests. This is where information related to payments is defined.
-- ` getBaseRequest() ` : declare version of Google Pay API
-- ` getGatewayTokenizationSpecification()` : request payment token for payment provider
-- ` getAllowedCardNetworks() ` : define card networks accepted by API, e.g. Discoveer, Mastercard, Visa etc
-- ` getAllowedCardAuthMethods() ` : define what payment methods on file will be returned 
-- ` getBaseCardPaymentMethod() ` : describes app's support for CARD payment method, returns a card payment method
 
 ### Constants.java
 This file defines the constants used in PaymentsUtils.java.
@@ -41,6 +33,13 @@ This file defines the constants used in PaymentsUtils.java.
 - List of supported cards eg `DISCOVER, MASTERCARD, VISA`
 - gateways/merchants - when using example gateway, card does not get charged (we left as example in this app)
 
+### PaymentsUtils.java
+This file contains the methods and helpers for getting payment requests. This is where information related to payments is defined.
+- ` getBaseRequest() ` : declare version of Google Pay API
+- ` getGatewayTokenizationSpecification()` : request payment token for payment provider
+- ` getAllowedCardNetworks() ` : define card networks accepted by API, e.g. Discoveer, Mastercard, Visa etc
+- ` getAllowedCardAuthMethods() ` : define what payment methods on file will be returned 
+- ` getBaseCardPaymentMethod() ` : describes app's support for CARD payment method, returns a card payment method
 
 ### CheckoutActivity.java
 This is where user activity happens! 
