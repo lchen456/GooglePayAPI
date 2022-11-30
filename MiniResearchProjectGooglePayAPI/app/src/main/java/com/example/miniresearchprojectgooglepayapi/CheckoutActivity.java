@@ -82,7 +82,6 @@ public class CheckoutActivity<ActivityCheckoutBinding> extends AppCompatActivity
         useBtn = findViewById(R.id.use_btn);
         background = findViewById(R.id.layout_background);
 
-        // The Google Pay button is a layout file – take the root view
         googlePayButton = findViewById(R.id.googlePay);
         googlePayButton.setOnClickListener(this::requestPayment);
 
@@ -108,8 +107,7 @@ public class CheckoutActivity<ActivityCheckoutBinding> extends AppCompatActivity
      * @param requestCode Request code originally supplied to AutoResolveHelper in requestPayment().
      * @param resultCode  Result code returned by the Google Pay API.
      * @param data        Intent from the Google Pay API containing payment or error data.
-     * @see <a href="https://developer.android.com/training/basics/intents/result">Getting a result
-     * from an Activity</a>
+     * @see "https://developer.android.com/training/basics/intents/result"
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -203,8 +201,7 @@ public class CheckoutActivity<ActivityCheckoutBinding> extends AppCompatActivity
      * requested information, such as billing and shipping address.
      *
      * @param paymentData A response object returned by Google after a payer approves payment.
-     * @see <a href="https://developers.google.com/pay/api/android/reference/
-     * object#PaymentData">PaymentData</a>
+     * @see "https://developers.google.com/pay/api/android/reference/object#PaymentData"
      */
     private void handlePaymentSuccess(PaymentData paymentData) {
 
@@ -238,13 +235,7 @@ public class CheckoutActivity<ActivityCheckoutBinding> extends AppCompatActivity
     }
 
     /**
-     * At this stage, the user has already seen a popup informing them an error occurred. Normally,
-     * only logging is required.
-     *
-     * @param statusCode will hold the value of any constant from CommonStatusCode or one of the
-     *                   WalletConstants.ERROR_CODE_* constants.
-     * @see <a href="https://developers.google.com/android/reference/com/google/android/gms/wallet/
-     * WalletConstants#constant-summary">Wallet Constants Library</a>
+     * At this stage, the user has already seen a popup informing them an error occurred. Normally, only logging is required.
      */
     private void handleError(int statusCode) {
         Log.e("loadPaymentData failed", String.format("Error code: %d", statusCode));
