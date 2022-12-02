@@ -6,6 +6,9 @@ This is a simple app that explores how to use GooglePay API. This was created wi
 For simplicity's sake, we have decided to just implement one color (purple). However, the code can be applied to multiple other colors as well.
 `Goal: the user can "buy" a color and apply that color to the app background`
 
+## To Test
+Please be logged into a google account that has been registered with google pay and has a payment method available!
+
 ## Setup
 [Setup](https://developers.google.com/pay/api/android/guides/setup)
 - minSdkVersion : 19 or higher
@@ -44,6 +47,7 @@ This file contains the methods and helpers for getting payment requests. This is
 ### CheckoutActivity.java
 This is where user activity happens! 
 In the `onCreate` method, we initialize all the views, including the Google Pay button. Then we check if client isReadyToPay(). If so, the Google Pay Payment shows up. 
+We have a boolean that checks if the purple theme is bought--and if it is then when the user presses 'use' the background will change to purple.
 
 ### Brand Guidelines
 We need to use the branded Google Pay button. The Google Pay API page also talks about best practices for using Google Pay API such as having a confirmation screen, etc. We have decided to forego some of the screens.
